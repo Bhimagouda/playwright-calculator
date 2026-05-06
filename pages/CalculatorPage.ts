@@ -46,14 +46,32 @@ export class CalculatorPage {
     await this.press('log');
   }
 
-
+  async pressValues(seq: string): Promise<void> {
+    for (const ch of seq) {
+      switch (ch) {
+        case '*':
+            await this.press('×');
+            break;
+        case '/':
+            await this.press('÷');
+            break;
+        case '-':
+            await this.press('−');
+            break;
+        case ' ':
+            break;
+        default:
+            await this.press(ch);
+      }
+    }
+  }
 
   async readDisplay(): Promise<string> {
     return (await this.display.inputValue()) ?? '';
   }
 
-  async expectDisplay(expected: string): Promise<void> {
-    await expect(this.display).toHaveValue(expected);
+  async expectDisplay(expected: any): Promise<void> {
+    await expect(this.display).toHaveValue(String(expected));
   }
 }
 
