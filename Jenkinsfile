@@ -1,6 +1,8 @@
 pipeline {
     agent any
 
+    tools { nodejs 'node20' }
+
     environment {
         CI = 'true'
         BASE_URL = 'https://rbihubcodechallenge.github.io/calculator/index.html'
@@ -40,7 +42,7 @@ pipeline {
     post {
         always {
             publishHTML(target: [
-                allowMissing         : false,
+                allowMissing         : true,
                 alwaysLinkToLastBuild: true,
                 keepAll              : true,
                 reportDir            : 'playwright-report',
