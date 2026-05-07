@@ -1,10 +1,10 @@
+```groovy
 pipeline {
     agent any
 
-    tools { nodejs 'node20' }
-
     environment {
         CI = 'true'
+        PATH = "/opt/homebrew/bin:/usr/local/bin:${env.PATH}"
         BASE_URL = 'https://rbihubcodechallenge.github.io/calculator/index.html'
     }
 
@@ -14,6 +14,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -26,9 +27,9 @@ pipeline {
             }
         }
 
-        stage('Install Playwright Browsers') {
+        stage('Install Playwright Browser') {
             steps {
-                sh 'npx playwright install --with-deps chromium'
+                sh 'npx playwright install chromium'
             }
         }
 
@@ -41,24 +42,27 @@ pipeline {
 
     post {
         always {
+
+            archiveArtifacts artifacts: 'playwright-report/**,test-results/**',
+                             allowEmptyArchive: true
+
             publishHTML(target: [
-                allowMissing         : true,
+                allowMissing: true,
                 alwaysLinkToLastBuild: true,
-                keepAll              : true,
-                reportDir            : 'playwright-report',
-                reportFiles          : 'index.html',
-                reportName           : 'Playwright Test Report'
+                keepAll: true,
+                reportDir: 'playwright-report',
+                reportFiles: 'index.html',
+                reportName: 'Playwright Test Report'
             ])
-
-            archiveArtifacts artifacts: 'test-results/**', allowEmptyArchive: true
-        }
-
-        failure {
-            echo 'Tests failed — check the Playwright HTML report for details.'
         }
 
         success {
             echo 'All Playwright tests passed.'
         }
+
+        failure {
+            echo 'Tests failed.'
+        }
     }
 }
+```
