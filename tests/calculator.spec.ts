@@ -95,3 +95,55 @@ test.describe('check inputs are displayed correctly', () => {
         });
     }
 })
+
+test.describe('check square root operations', () => {
+    const cases: Array<[string, number]> = [
+        ['0', 0],
+        ['1', 1],
+        ['4', 2],
+        ['9', 3],
+        ['16', 4],
+    ];
+
+    for (const [input, expected] of cases) {
+        test(`${input} = ${expected}`, async ({ page }) => {
+            const calc = new CalculatorPage(page);
+            await calc.goto();
+            await calc.pressValues(input);
+            await calc.sqrt();
+            await calc.expectDisplay(expected);
+        });
+    }
+});
+
+test('sin(0) = 0', async ({ page }) => {
+    const calc = new CalculatorPage(page);
+    await calc.goto();
+    await calc.pressValues('0');
+    await calc.sin();
+    await calc.expectDisplay(0);
+});
+
+test('cos(0) = 1', async ({ page }) => {
+    const calc = new CalculatorPage(page);
+    await calc.goto();
+    await calc.pressValues('0');
+    await calc.cos();
+    await calc.expectDisplay(1);
+});
+
+test('tan(0) = 0', async ({ page }) => {
+    const calc = new CalculatorPage(page);
+    await calc.goto();
+    await calc.pressValues('0');
+    await calc.tan();
+    await calc.expectDisplay(0);
+});
+
+test('log(1) = 0', async ({ page }) => {
+    const calc = new CalculatorPage(page);
+    await calc.goto();
+    await calc.pressValues('1');
+    await calc.log();
+    await calc.expectDisplay(0);
+});
