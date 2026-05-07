@@ -1,4 +1,3 @@
-```groovy
 pipeline {
     agent any
 
@@ -14,7 +13,6 @@ pipeline {
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -42,7 +40,6 @@ pipeline {
 
     post {
         always {
-
             archiveArtifacts artifacts: 'playwright-report/**,test-results/**',
                              allowEmptyArchive: true
 
@@ -65,4 +62,3 @@ pipeline {
         }
     }
 }
-```
